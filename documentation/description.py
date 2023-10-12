@@ -9,9 +9,13 @@ You will be able to:
 * Create new student.
 * Get student List.
 
-## Prof 
-You'll be able to signup and login
 
-## Course
-You'll be able to list and create courses with students at determinated date.
+## Courses 
+You'll be able to
+* Create new courses.
+* List all Courses
+
+## Sessions
+You'll be able to:
+
 """

@@ -5,6 +5,7 @@ from fastapi import FastAPI , HTTPException
 
 #Import des routers
 import routers.router_students
+import routers.router_courses
 
 # Documentation
 from documentation.description import api_description
@@ -22,3 +23,4 @@ app  = FastAPI(
 
 # Ajouter les routers dédiés
 app.include_router(routers.router_students.router)
+app.include_router(routers.router_courses.router)
