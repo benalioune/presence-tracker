@@ -11,16 +11,22 @@ class StudentNoID(BaseModel):
 
 
 class Student(BaseModel):
-    id: int
+    id: str
     name: str
+    
+    
+class User(BaseModel):
+
+    email: str
+    password: str
     
     
 
 students = [
-    Student(id=1, name="Adama"),
-    Student(id=2, name="Adrien"),
-    Student(id=3, name="Akbar"),
-    Student(id=4, name="Alioune")
+    Student(id="efe", name="Adama"),
+    Student(id="fef", name="Adrien"),
+    Student(id="dfd", name="Akbar"),
+    Student(id="frf", name="Alioune")
 ]
 
 

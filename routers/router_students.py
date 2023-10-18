@@ -1,10 +1,16 @@
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from classes import  schemas_dto
 from classes.schemas_dto import students
 from classes.schemas_dto import Student
 from classes.schemas_dto  import StudentNoID
 from typing import List
+import firebase_admin
+
+
+from database.firebase import db
+
+
+
 import uuid
 
 
@@ -32,6 +38,8 @@ async def create_student(givenName:str):
     newStudent= Student(id=str(generatedId), name=givenName)
     # Ajout du nouveau Student dans la List/Array
     students.append(newStudent)
+    
+    db.child("student").child(generatedId).set(newStudent.model_dump())
     # Réponse définit par le Student avec son ID
     return newStudent
 
@@ -42,6 +50,7 @@ async def create_student(givenName:str):
 async def get_student_by_ID(student_id:str): # student_id correspond au URI parameter du path: '/students/{student_id}'
     #On parcours chaque étudiant de la liste
     for student in students:
+        fireBaseObject = db.child('student').child(student_id).get().val()
         # Si l'ID correspond, on retourne l'étudiant trouvé
         if student.id == student_id:
             return student
