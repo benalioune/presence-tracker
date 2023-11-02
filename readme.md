@@ -5,8 +5,7 @@ l'étudiants réserve une seance de cours avec un enseignant dans une salle à u
 On auras des informations sur :
 
     -  les étudiants
-    -
-    -  les enseignants
+    - Courses 
     -   ainsi que les séances de cours réservées qui sont composées d'étudiants, d'enseignants dans une salle oubien en distantiel à une date et heure déterminée.
 
 

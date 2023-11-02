@@ -5,6 +5,11 @@ import json
 
 from configs.firebase_config import firebaseConfig
 
+from dotenv import dotenv_values
+
+
+
+
 
 
 # import des crédentiels
