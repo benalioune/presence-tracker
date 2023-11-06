@@ -24,7 +24,8 @@ app  = FastAPI(
 
 
 # Ajouter les routers dédiés
+app.include_router(routers.router_auth.router)
 app.include_router(routers.router_students.router)
 app.include_router(routers.router_courses.router)
-app.include_router(routers.router_auth.router)
+
 app.include_router(routers.router_stripe.router)

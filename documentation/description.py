@@ -16,6 +16,10 @@ You'll be able to
 * List all Courses
 
 ## Sessions
-You'll be able to:
+You'll be able to: 
+
+* Create a session. 
+* modify sessions
+*delete sessions
 
 """

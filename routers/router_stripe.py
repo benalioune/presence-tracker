@@ -39,21 +39,31 @@ async def stripe_checkout():
     except Exception as e:
         return str(e)
     
-    
+    # create webhook endpoint
 @router.post('/webhook')
 async def webhook_received(request:Request, stripe_signature: str = Header(None)):
+    # use request to get a body and stripe  signature from the header to validate the payload 
     webhook_secret = stripe_config['webhook_secret']
+    # stock the data from the request
     data = await request.body
+    
+    #construct a webhook event using the stripe library
+    
     try:
+        # call  the construct event function  on the stripe library passing the event data
         event = stripe.Webhook.construct_event(
+            #use the webhook secret and the stripe signature  from the header to validate the event 
             payload=data,
             sig_header=stripe_signature,
             secret=webhook_secret
         )
+        # pull out the event data 
         event_data = event['data']
+        # return error and raise 
     except Exception as e:
         return {'error':str(e)}
     
+    # handle the event that we received 
     event_type = event ['type']
     if event_type == 'checkout.session.completed': print('Checkout session completed')
     elif event_type == 'invoice.paid':

@@ -5,7 +5,7 @@ from classes.schemas_dto import Student
 from classes.schemas_dto  import StudentNoID
 from typing import List
 import firebase_admin
-
+from routers.router_auth import get_current_user
 
 from database.firebase import db
 
@@ -22,9 +22,14 @@ router = APIRouter(
 
 
 # Verbs + Endpoints
-@router.get('/students', response_model=List[Student])
-async def get_student():
-    return students
+@router.get("/students", response_model=List[Student])
+async def get_student(user_data: int= Depends(get_current_user)):
+    queryResults = db.child("student").get(user_data['idToken']).val()
+    if not queryResults : return []
+    studentArray = [Student(**value) for value in queryResults.values()]
+    return studentArray 
+
+
 
 
 # 1. Exercice (10min) Create new Student: POST
@@ -47,20 +52,16 @@ async def create_student(givenName:str):
 # 2. Exercice (10min) Student GET by ID
 # response_model est un Student car nous souhaitons trouvé l'étudiant correspodant à l'ID
 @router.get('/students/{student_id}', response_model=Student)
-async def get_student_by_ID(student_id:str): # student_id correspond au URI parameter du path: '/students/{student_id}'
-    #On parcours chaque étudiant de la liste
-    for student in students:
-        fireBaseObject = db.child('student').child(student_id).get().val()
-        # Si l'ID correspond, on retourne l'étudiant trouvé
-        if student.id == student_id:
-            return student
-        # pas de "else" car si on ne l'a pas trouvé, on continue avec le prochain student
-    # Si on arrive ici, c'est que la boucle sur la liste "students" n'a rien trouvé
-    # On lève donc un HTTP Exception
-    raise HTTPException(status_code= 404, detail="Student not found")
+async def get_student_by_id(student_id: str, user_data: int= Depends(get_current_user)):
+    queryResult = db.child('users').child(user_data['uid']).child('student').child(student_id).get(user_data['idToken']).val()
+    if not queryResult : raise HTTPException(status_code=404, detail="Student not found") 
+    return queryResult
+
+
+
 
 # 3. Exercice (10min) PATCH Student (name)
-@router.patch('/students/{student_id}', status_code=204)
+@router.patch('/{student_id}', status_code=204)
 async def modify_student_name(student_id:str, modifiedStudent: StudentNoID):
     for student in students:
         if student.id == student_id:
@@ -69,7 +70,7 @@ async def modify_student_name(student_id:str, modifiedStudent: StudentNoID):
     raise HTTPException(status_code= 404, detail="Student not found")
 
 # 4. Exercice (10min) DELETE Student
-@router.delete('/students/{student_id}', status_code=204)
+@router.delete('/{student_id}', status_code=204)
 async def delete_student(student_id:str):
     for student in students:
         if student.id == student_id:
