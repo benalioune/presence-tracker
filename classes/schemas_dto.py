@@ -36,7 +36,12 @@ class Config:
     }
     
 
-
+class Sessions (BaseModel):
+    id: str
+    idStudent: str
+    idCourse: str
+    date: str
+    sale: str
 
 class Config:
     schema_extra={
@@ -63,7 +68,7 @@ students = [
 
 
 
-class Courses_POST_Body (BaseModel):
+class CourseNoId (BaseModel):
     courseName: str
     coursePrice: float
     courseTeacher: str
@@ -75,15 +80,18 @@ class Courses_POST_Body (BaseModel):
 
 
 class Course(BaseModel): 
-    id: int
+    id: str
     courseWording: str
     coursePrice: float
     courseTeacher: str
     courseDuration: int
     
+    
 courses = [
-    Course(id=1, courseWording="Mathématiques", coursePrice=50.0, courseTeacher="M. Smith", courseDuration=60),
-    Course(id=2, courseWording="Physique", coursePrice=60.0, courseTeacher="Mme. Johnson", courseDuration=45),
-    Course(id=3, courseWording="chimie", coursePrice=60.0, courseTeacher="Mme. Berry", courseDuration=45)
+    Course(id="shsj", courseWording="Mathématiques", coursePrice=50.0, courseTeacher="M. Smith", courseDuration=60),
+    Course(id="gsgs", courseWording="Physique", coursePrice=60.0, courseTeacher="Mme. Johnson", courseDuration=45),
+    Course(id="gsh", courseWording="chimie", coursePrice=60.0, courseTeacher="Mme. Berry", courseDuration=45)
     
 ]
+
+

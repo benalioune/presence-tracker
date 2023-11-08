@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Depends
 import stripe
-from fastapi.responses import RedirectResponse
 from fastapi import APIRouter, Header, Request
 from routers.router_auth import get_current_user
 from firebase_admin import auth
@@ -39,6 +38,9 @@ async def stripe_checkout():
     except Exception as e:
         return str(e)
     
+    
+
+    
     # create webhook endpoint
 @router.post('/webhook')
 async def webhook_received(request:Request, stripe_signature: str = Header(None)):
@@ -72,7 +74,7 @@ async def webhook_received(request:Request, stripe_signature: str = Header(None)
         firebase_user = auth.get_user_by_email(customer_email)
         customer_id = event_data['object']['customer']
         item_id = event_data['object']['lines']['data'][0]['subscription_item']
-        db.child('users').child(firebase_user.uid).child('stripe').set(
+        db.child('user').child(firebase_user.uid).child('stripe').set(
             data={
                 'item_id':item_id,
                 'customer_id':customer_id
@@ -93,7 +95,7 @@ async def stripe_usage(userData: int = Depends(get_current_user)):
 
 def increment_stripe(userId:str):
     firebase_user= auth.get_user(userId) #identifiant firebase correspondant (uid)]
-    stripe_data = db.child("users").child(firebase_user.uid).child("stripe").get().val()
+    stripe_data = db.child("user").child(firebase_user.uid).child("stripe").get().val()
     print(stripe_data.values())
     item_id= stripe_data['item_id']
     stripe.SubscriptionItem.create_usage_record(item_id, quantity=1)

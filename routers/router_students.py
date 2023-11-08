@@ -4,7 +4,6 @@ from classes.schemas_dto import students
 from classes.schemas_dto import Student
 from classes.schemas_dto  import StudentNoID
 from typing import List
-import firebase_admin
 from routers.router_auth import get_current_user
 
 from database.firebase import db
@@ -53,7 +52,7 @@ async def create_student(givenName:str):
 # response_model est un Student car nous souhaitons trouvé l'étudiant correspodant à l'ID
 @router.get('/students/{student_id}', response_model=Student)
 async def get_student_by_id(student_id: str, user_data: int= Depends(get_current_user)):
-    queryResult = db.child('users').child(user_data['uid']).child('student').child(student_id).get(user_data['idToken']).val()
+    queryResult = db.child('student').child(student_id).get(user_data['idToken']).val()
     if not queryResult : raise HTTPException(status_code=404, detail="Student not found") 
     return queryResult
 
@@ -62,22 +61,21 @@ async def get_student_by_id(student_id: str, user_data: int= Depends(get_current
 
 # 3. Exercice (10min) PATCH Student (name)
 @router.patch('/{student_id}', status_code=204)
-async def modify_student_name(student_id:str, modifiedStudent: StudentNoID):
-    for student in students:
-        if student.id == student_id:
-            student.name=modifiedStudent.name
-            return
-    raise HTTPException(status_code= 404, detail="Student not found")
+async def student_update(student_id: str, student: StudentNoID, user_data: int= Depends(get_current_user)):
+    queryResult = db.child('student').child(student_id).get(user_data['idToken']).val()
+    if not queryResult : raise HTTPException(status_code=404, detail="Student not found") 
+    updatedStudent = Student(id=student_id, **student.model_dump())
+    return db.child('student').child(student_id).update(data=updatedStudent.model_dump(), token=user_data['idToken'])
+
 
 # 4. Exercice (10min) DELETE Student
-@router.delete('/{student_id}', status_code=204)
-async def delete_student(student_id:str):
-    for student in students:
-        if student.id == student_id:
-            students.remove(student)
-            return
-    raise HTTPException(status_code= 404, detail="Student not found")
-
+@router.delete("/{student_id}", status_code=202, response_model=str)
+async def student_delete(student_id: str, user_data: int= Depends(get_current_user)) :
+    queryResult = db.child('student').child(student_id).get(user_data['idToken']).val()
+    if not queryResult : 
+        raise HTTPException(status_code=404, detail="Student not found")
+    db.child('student').child(student_id).remove(token=user_data['idToken'])
+    return "Student deleted"
 
 # Reste à faire 
 # - Sortir mon student's router dans un dossier "routers"

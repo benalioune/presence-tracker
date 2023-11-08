@@ -5,7 +5,7 @@ tags_metadata = [
     },
     {
         "name": "Courses",
-        "description": "Create and list courses of our API",
+        "description": "reate, Modify, Delete, or List courses of our API",
     },
     
     
