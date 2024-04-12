@@ -9,4 +9,7 @@ On auras des informations sur :
     -   ainsi que les séances de cours réservées qui sont composées d'étudiants, d'enseignants dans une salle oubien en distantiel à une date et heure déterminée.
 
 
-pour réserver une séance les étudiant devront passer par une authentification et payer un tarif.
+pour réserver une séance les étudiant devront passer par une authentification et payer un tarif déterminé.
+
+
+#ci-test  est la branche d'utilisateur pour test
