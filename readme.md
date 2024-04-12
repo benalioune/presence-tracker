@@ -12,4 +12,4 @@ On auras des informations sur :
 pour réserver une séance les étudiant devront passer par une authentification et payer un tarif déterminé.
 
 
-#ci-test  est la branche d'utilisateur pour test
+#ci-test  est la branche d'utilisateur pour test er l'api sans toucher aux données existantes
