@@ -13,3 +13,5 @@ pour réserver une séance les étudiant devront passer par une authentification
 
 
 #ci-test  est la branche d'utilisateur pour test er l'api sans toucher aux données existantes
+## Installation
+bash        
